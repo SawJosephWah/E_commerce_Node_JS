@@ -12,9 +12,12 @@ app.use(express.json());
 // routes
 let permitRoutes = require('./routes/permit');
 let roleRoutes = require('./routes/role');
+let userRoutes = require('./routes/user');
 
 app.use('/permit',permitRoutes);
 app.use('/role',roleRoutes);
+app.use('/user',userRoutes);
+
 
 //for error message
 app.use((err, req, res, next) => {
@@ -27,10 +30,17 @@ app.use((err, req, res, next) => {
   })
 
 
+// migrations
+let migrateData = async ()=>{
+  let migrator = require('./migrations/migrator');
+  // migrator.migrate();
+  // migrator.backup();
+  // migrator.migrate_role_permit();
+  // migrator.add_owner_role_to_owner_user();
+}
+migrateData();
+
+
 app.listen(process.env.PORT, () => {
   console.log(`Ecommerce app listening on port ${process.env.PORT}`)
 })
-
-// app.get('*', function(req, res){
-//     res.send('what???', 404);
-//   });

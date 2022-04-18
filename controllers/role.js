@@ -15,7 +15,7 @@ const add =async  (req,res,next) => {
 }
 
 const all = async (req,res,next) => {
-    let roles = await RoleDB.find();
+    let roles = await RoleDB.find().populate('permits','name');
     Helper.fMsg(res,'All roles',roles);
 }
 
@@ -54,11 +54,22 @@ const update = async (req,res,next) => {
 const addPermitToRole = async (req,res,next) => {
     let role = await RoleDB.findById(req.body.roleId);
     let permit = await PermitDB.findById(req.body.permitId);
-    // Helper.fMsg(res,'Add permit to role updated',role);
     if(role && permit){
         await RoleDB.findByIdAndUpdate(role._id, { $push: { permits: permit._id } });
         let result = await RoleDB.findById(role._id);
         Helper.fMsg(res,'Add permit to role updated',result);
+    }else{
+        next(new Error('Role ID and permit Id must be valid !')); 
+    }
+}
+
+const removePermitToRole = async (req,res,next) => {
+    let role = await RoleDB.findById(req.body.roleId);
+    let permit = await PermitDB.findById(req.body.permitId);
+    if(role && permit){
+        await RoleDB.findByIdAndUpdate(role._id, { $pull: { permits: permit._id } });
+        let result = await RoleDB.findById(role._id);
+        Helper.fMsg(res,'Remove permit to role',result);
     }else{
         next(new Error('Role ID and permit Id must be valid !')); 
     }
@@ -70,5 +81,6 @@ module.exports = {
     get,
     drop,
     update,
-    addPermitToRole
+    addPermitToRole,
+    removePermitToRole
 }

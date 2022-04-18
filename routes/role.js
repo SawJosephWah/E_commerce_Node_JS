@@ -15,6 +15,8 @@ router.route('/:id')
 .patch(validateObjectId(schema.allSchema.id),role.update);
 
 router.post('/add/permit',valiatePermitAddToRole(schema.role.permitAddToRole),role.addPermitToRole);
+router.post('/remove/permit',valiatePermitAddToRole(schema.role.permitAddToRole),role.removePermitToRole);//use same validate and schema bcuz requirements are same
+
   
 
 

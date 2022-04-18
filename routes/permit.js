@@ -2,10 +2,10 @@ let express = require('express');
 let router = express.Router();
 let permit = require('../controllers/permit');
 let schema = require('../utils/schema');
-let {validatePermitBody,validateObjectId} = require('../utils/validator')
+let {validatePermitBody,validateObjectId ,validateToken} = require('../utils/validator')
 
 // Define the home page route
-router.post('/', validatePermitBody(schema.permit.permitBody),permit.add);
+router.post('/',validateToken ,validatePermitBody(schema.permit.permitBody),permit.add);
 
 router.get('/', permit.all);
 
